@@ -5,27 +5,38 @@ import java.sql.Timestamp;
 import org.springframework.data.annotation.Id;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import lombok.Data;
 
 @Entity
 @Data
-public class Forum {
+public class Message {
 
-	public Forum() {
+	public Message() {
 		
 	}
-	
-	
 	@jakarta.persistence.Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int message_id;
+	
+	public int getMessage_id() {
+		return message_id;
+	}
+	public void setMessage_id(int message_id) {
+		this.message_id = message_id;
+	}
+	
 	private int forum_id;
+	
 	private int user_id;
-	private int first_name;
+	private String first_name;
 	private String message;
 	private Timestamp timestamp;
 	
 	
 	
-	public Forum(int forum_id, int user_id, int first_name, String message, Timestamp timestamp) {
+	public Message(int forum_id, int user_id, String first_name, String message, Timestamp timestamp) {
 		super();
 		this.forum_id = forum_id;
 		this.user_id = user_id;
@@ -57,10 +68,10 @@ public class Forum {
 	public void setTimestamp(Timestamp timestamp) {
 		this.timestamp = timestamp;
 	}
-	public int getFirst_name() {
+	public String getFirst_name() {
 		return first_name;
 	}
-	public void setFirst_name(int first_name) {
+	public void setFirst_name(String first_name) {
 		this.first_name = first_name;
 	}
 
