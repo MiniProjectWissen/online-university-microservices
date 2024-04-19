@@ -1,4 +1,5 @@
 package com.example.forum.controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -13,40 +14,42 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.forum.dao.ForumDao;
-import com.example.forum.entity.Forum;
+
+import com.example.forum.dao.MessageDao;
+
+import com.example.forum.entity.Message;
+import com.example.forum.exception.ForumMessageException;
 
 
 @RestController
-public class ForumController {
+@CrossOrigin("http://localhost:4200")
+public class MessageController {
 	
 	@Autowired
-	private ForumDao forumDao;
+	private MessageDao messageDao;
 	
 	@PostMapping("forum/send")
-    public ResponseEntity<Object> sendMessage(@RequestBody Forum msg) {
+    public ResponseEntity<Object> sendMessage(@RequestBody Message msg) {
         
 		if (msg == null || msg.getMessage() == null || msg.getMessage().isEmpty()) {
             return new ResponseEntity<>("Message body cannot be empty", HttpStatus.BAD_REQUEST);
         }
 		
         try {
-            Forum savedMsg = forumDao.save(msg);
+            Message savedMsg = messageDao.save(msg);
             return ResponseEntity.ok(savedMsg);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("An error occurred while sending the message.");
+        	throw new ForumMessageException("An error occurred while sending messages.", e);
         }
     }
     
     @GetMapping("forum/receive/{forumId}")
-    public ResponseEntity<Object> receiveMessage(@PathVariable int forumId) {
+    public ResponseEntity<List<Message>> receiveMessage(@PathVariable int forumId) {
         try {
-            List<Forum> messageList = forumDao.findByForumIdOrderByTimestamp(forumId);
+            List<Message> messageList = messageDao.findByForumIdOrderByTimestamp(forumId);
             return ResponseEntity.ok(messageList);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("An error occurred while receiving messages.");
+        	throw new ForumMessageException("An error occurred while receiving messages.", e);
         }
     }
 

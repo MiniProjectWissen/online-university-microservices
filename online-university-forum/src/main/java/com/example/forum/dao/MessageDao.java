@@ -8,11 +8,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
-import com.example.forum.entity.Forum;
+
+import com.example.forum.entity.Message;
 
 @Repository
-public interface ForumDao extends JpaRepository<Forum, Integer> {
+public interface MessageDao extends JpaRepository<Message, Integer> {
 
-	@Query("SELECT f FROM Forum f WHERE f.forum_id = :forumId ORDER BY f.timestamp")
-    List<Forum> findByForumIdOrderByTimestamp(@Param("forumId") int forumId);
+	@Query("SELECT f FROM Message f WHERE f.forum_id = :forumId ORDER BY f.timestamp ASC")
+    List<Message> findByForumIdOrderByTimestamp(@Param("forumId") int forumId);
 }

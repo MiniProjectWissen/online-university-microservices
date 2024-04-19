@@ -26,6 +26,11 @@ spring:
           uri: lb://ONLINE-UNIVERSITY-BACKEND
           predicates:
             - Path=/student/**,/teacher/**,/course/**,/test/**
+            
+        - id: ONLINE-UNIVERSITY-FORUM
+          uri: lb://ONLINE-UNIVERSITY-FORUM
+          predicates:
+            - Path=/forum/**
 
        
 
